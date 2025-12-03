@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Backup Codes - {{ site_settings.site_name|default:"SaiReeCMPO" }}{% endblock %}
+
+{% block content %}
+<section id="backup-codes-page" style="padding-top: 150px; min-height: 80vh;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="entry-form" style="margin-top: 0;">
+                    <h2 class="text-center"><i class="fa fa-check-circle text-success"></i> MFA Enabled!</h2>
+                    <p class="text-center text-muted">Save these backup codes in a safe place</p>
+                    
+                    <div class="alert alert-warning">
+                        <strong><i class="fa fa-exclamation-triangle"></i> Important!</strong>
+                        <p>These backup codes can be used to access your account if you lose your authenticator device. Each code can only be used once.</p>
+                    </div>
+                    
+                    <div style="background: #f5f5f5; padding: 20px; border-radius: 5px; margin: 20px 0;">
+                        <div class="row">
+                            {% for code in backup_codes %}
+                            <div class="col-xs-6" style="margin: 5px 0;">
+                                <code style="font-size: 14px; display: block; padding: 8px; background: #fff; border: 1px solid #ddd;">{{ code }}</code>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button onclick="window.print()" class="btn btn-default">
+                            <i class="fa fa-print"></i> Print Codes
+                        </button>
+                        <a href="{% url 'accounts:profile' %}" class="btn btn-primary">
+                            <i class="fa fa-check"></i> I've Saved My Codes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'dashboard/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Profile{% endblock %}
+{% block page_title %}Profile Settings{% endblock %}
+
+{% block dashboard_content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Profile Information</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" name="update_profile" class="btn btn-primary">Update Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Change Password</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ password_form|crispy }}
+                    <button type="submit" name="change_password" class="btn btn-primary">Change Password</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Two-Factor Authentication</h5>
+            </div>
+            <div class="card-body">
+                {% if user.mfa_enabled %}
+                <div class="alert alert-success">
+                    <i class="fa fa-check-circle"></i> MFA is enabled on your account
+                </div>
+                <p>Remaining backup codes: {{ user.get_remaining_backup_codes_count }}</p>
+                <form method="post" action="{% url 'accounts:mfa_disable' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to disable MFA?');">
+                        <i class="fa fa-times"></i> Disable MFA
+                    </button>
+                </form>
+                {% else %}
+                <div class="alert alert-warning">
+                    <i class="fa fa-exclamation-triangle"></i> MFA is not enabled. Enable it for better security.
+                </div>
+                <a href="{% url 'accounts:mfa_setup' %}" class="btn btn-success">
+                    <i class="fa fa-shield"></i> Enable MFA
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

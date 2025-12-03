@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ announcement.title }} - {{ site_settings.site_name|default:"SaiReeCMPO" }}{% endblock %}
+
+{% block content %}
+<section id="announcement-detail" style="padding-top: 120px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                {% if announcement.image %}
+                <img src="{{ announcement.image.url }}" class="img-responsive" alt="{{ announcement.title }}" style="margin-bottom: 20px;">
+                {% endif %}
+                
+                <h1>{{ announcement.title }}</h1>
+                
+                <div class="post-meta" style="margin-bottom: 20px; color: #777;">
+                    <span><i class="fa fa-calendar"></i> {{ announcement.published_date|date:"d M Y" }}</span>
+                    <span><i class="fa fa-eye"></i> {{ announcement.view_count }} views</span>
+                    {% if announcement.priority == 'urgent' %}
+                    <span class="label label-danger">Urgent</span>
+                    {% elif announcement.priority == 'high' %}
+                    <span class="label label-warning">Important</span>
+                    {% endif %}
+                </div>
+                
+                {% if announcement.expiry_date %}
+                <div class="alert alert-info">
+                    <i class="fa fa-clock-o"></i> Valid until: {{ announcement.expiry_date|date:"d M Y" }}
+                </div>
+                {% endif %}
+                
+                <div class="content">
+                    {{ announcement.description|safe }}
+                </div>
+                
+                {% if announcement.attachment %}
+                <hr>
+                <p><a href="{{ announcement.attachment.url }}" class="btn btn-primary" download><i class="fa fa-download"></i> Download Attachment</a></p>
+                {% endif %}
+                
+                <hr>
+                <a href="{% url 'content:announcements_list' %}" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to Announcements</a>
+            </div>
+            
+            <div class="col-md-4">
+                <h4>Recent Announcements</h4>
+                <ul class="list-unstyled">
+                    {% for item in recent_announcements %}
+                    <li style="margin-bottom: 15px; padding: 10px; background: #f9f9f9;">
+                        <a href="{% url 'content:announcement_detail' item.pk %}">{{ item.title }}</a>
+                        <br><small class="text-muted">{{ item.published_date|date:"d M Y" }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Message Details{% endblock %}
+{% block page_title %}Message Details{% endblock %}
+{% block dashboard_content %}
+<div class="card">
+    <div class="card-header"><h5 class="mb-0">Message from {{ message.name }}</h5></div>
+    <div class="card-body">
+        <p><strong>From:</strong> {{ message.name }} ({{ message.email }})</p>
+        {% if message.phone %}<p><strong>Phone:</strong> {{ message.phone }}</p>{% endif %}
+        <p><strong>Subject:</strong> {{ message.subject }}</p>
+        <p><strong>Date:</strong> {{ message.created_at|date:"d M Y H:i" }}</p>
+        <hr>
+        <p>{{ message.message|linebreaks }}</p>
+        <hr>
+        <a href="{% url 'content:dashboard_contact_list' %}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back</a>
+        <a href="mailto:{{ message.email }}" class="btn btn-primary"><i class="fa fa-reply"></i> Reply</a>
+    </div>
+</div>
+{% endblock %}

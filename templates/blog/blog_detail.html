@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} - {{ site_settings.site_name|default:"SaiReeCMPO" }}{% endblock %}
+
+{% block content %}
+<section id="blog-detail" style="padding-top: 120px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <article>
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" class="img-responsive" alt="{{ post.title }}" style="margin-bottom: 20px;">
+                    {% endif %}
+                    
+                    <h1>{{ post.title }}</h1>
+                    
+                    <div class="post-meta" style="margin-bottom: 20px; color: #777;">
+                        <span><i class="fa fa-user"></i> {{ post.author.get_full_name|default:post.author.email }}</span>
+                        <span><i class="fa fa-calendar"></i> {{ post.published_at|date:"d M Y" }}</span>
+                        <span><i class="fa fa-eye"></i> {{ post.view_count }} views</span>
+                        {% if post.category %}
+                        <span><i class="fa fa-folder"></i> {{ post.category.name }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    {% if post.tags.all %}
+                    <div class="post-tags" style="margin-bottom: 20px;">
+                        {% for tag in post.tags.all %}
+                        <a href="{% url 'blog:list' %}?tag={{ tag.slug }}" class="label label-default">{{ tag.name }}</a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if post.video_embed %}
+                    <div class="video-embed" style="margin-bottom: 20px;">
+                        {{ post.video_embed|safe }}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="post-content">
+                        {{ post.description|safe }}
+                    </div>
+                </article>
+                
+                <hr>
+                
+                <!-- Comments Section -->
+                <div class="comments-section">
+                    <h3>Comments ({{ post.comments.count }})</h3>
+                    
+                    {% for comment in post.comments.all %}
+                    {% if comment.is_approved %}
+                    <div class="comment" style="padding: 15px; background: #f9f9f9; margin-bottom: 15px; border-radius: 5px;">
+                        <strong>{{ comment.name }}</strong>
+                        <small class="text-muted">{{ comment.created_at|date:"d M Y H:i" }}</small>
+                        <p style="margin-top: 10px;">{{ comment.content }}</p>
+                    </div>
+                    {% endif %}
+                    {% empty %}
+                    <p class="text-muted">No comments yet.</p>
+                    {% endfor %}
+                    
+                    <h4>Leave a Comment</h4>
+                    <form method="post" action="{% url 'blog:comment_submit' post.pk %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="content" class="form-control" rows="4" placeholder="Your Comment" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Comment</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="sidebar">
+                    <!-- Related Posts -->
+                    {% if related_posts %}
+                    <div class="widget" style="margin-bottom: 30px;">
+                        <h4>Related Posts</h4>
+                        <ul class="list-unstyled">
+                            {% for related in related_posts %}
+                            <li style="margin-bottom: 10px;">
+                                <a href="{% url 'blog:detail' related.slug %}">{{ related.title }}</a>
+                                <br><small class="text-muted">{{ related.published_at|date:"d M Y" }}</small>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Categories -->
+                    <div class="widget" style="margin-bottom: 30px;">
+                        <h4>Categories</h4>
+                        <ul class="list-unstyled">
+                            {% for cat in categories %}
+                            <li><a href="{% url 'blog:list' %}?category={{ cat.slug }}">{{ cat.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

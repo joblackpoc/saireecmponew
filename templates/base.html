@@ -1,0 +1,214 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}{{ site_settings.site_title|default:"SaiReeCMPO" }}{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="description" content="{{ site_settings.site_description|default:'' }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'css/templatemo-style.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+    
+    <style>
+        /* Additional custom styles */
+        .btn-primary {
+            background-color: #f95959;
+            border-color: #f95959;
+        }
+        .btn-primary:hover {
+            background-color: #e74c4c;
+            border-color: #e74c4c;
+        }
+        .alert {
+            border-radius: 0;
+        }
+        .messages-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+        }
+        .section-title h2 small {
+            display: block;
+            font-size: 14px;
+            color: #757575;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body id="top" data-spy="scroll" data-target=".navbar-collapse" data-offset="50">
+
+    <!-- PRE LOADER -->
+    <section class="preloader">
+        <div class="spinner">
+            <span class="spinner-rotate"></span>
+        </div>
+    </section>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- MENU -->
+    <section class="navbar custom-navbar navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon icon-bar"></span>
+                    <span class="icon icon-bar"></span>
+                    <span class="icon icon-bar"></span>
+                </button>
+                <a href="{% url 'content:landing' %}" class="navbar-brand">
+                    {{ site_settings.site_name|default:"SaiReeCMPO" }}
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-nav-first">
+                    {% block nav_items %}
+                    <li><a href="{% url 'content:landing' %}#top" class="smoothScroll">Home</a></li>
+                    <li><a href="{% url 'content:landing' %}#about" class="smoothScroll">About</a></li>
+                    <li><a href="{% url 'content:landing' %}#team" class="smoothScroll">Team</a></li>
+                    <li><a href="{% url 'content:landing' %}#announcements" class="smoothScroll">Announcements</a></li>
+                    <li><a href="{% url 'content:landing' %}#activities" class="smoothScroll">Activities</a></li>
+                    <li><a href="{% url 'blog:list' %}">Blog</a></li>
+                    <li><a href="{% url 'download:list' %}">Downloads</a></li>
+                    <li><a href="{% url 'content:landing' %}#contact" class="smoothScroll">Contact</a></li>
+                    {% endblock %}
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-user"></i> {{ user.first_name }}
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'accounts:dashboard' %}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li><a href="{% url 'accounts:profile' %}"><i class="fa fa-cog"></i> Profile</a></li>
+                            <li><a href="{% url 'pdfapp:list' %}"><i class="fa fa-file-pdf-o"></i> PDF Converter</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li><a href="{% url 'accounts:login' %}"><i class="fa fa-sign-in"></i> Login</a></li>
+                    {% endif %}
+                    {% if site_settings.phone %}
+                    <li><a href="tel:{{ site_settings.phone }}"><i class="fa fa-phone"></i> {{ site_settings.phone }}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    {% block content %}{% endblock %}
+
+    <!-- FOOTER -->
+    <footer id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-sm-6">
+                    <div class="footer-info">
+                        <div class="section-title">
+                            <h2>Headquarter</h2>
+                        </div>
+                        <address>
+                            <p>{{ site_settings.address|default:"Address not set"|linebreaks }}</p>
+                        </address>
+
+                        <ul class="social-icon">
+                            {% if site_settings.facebook_url %}
+                            <li><a href="{{ site_settings.facebook_url }}" class="fa fa-facebook-square" target="_blank"></a></li>
+                            {% endif %}
+                            {% if site_settings.twitter_url %}
+                            <li><a href="{{ site_settings.twitter_url }}" class="fa fa-twitter" target="_blank"></a></li>
+                            {% endif %}
+                            {% if site_settings.instagram_url %}
+                            <li><a href="{{ site_settings.instagram_url }}" class="fa fa-instagram" target="_blank"></a></li>
+                            {% endif %}
+                            {% if site_settings.youtube_url %}
+                            <li><a href="{{ site_settings.youtube_url }}" class="fa fa-youtube" target="_blank"></a></li>
+                            {% endif %}
+                        </ul>
+
+                        <div class="copyright-text">
+                            <p>{{ site_settings.copyright_text|default:"Copyright © 2024" }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6">
+                    <div class="footer-info">
+                        <div class="section-title">
+                            <h2>Contact Info</h2>
+                        </div>
+                        <address>
+                            {% if site_settings.phone %}<p>{{ site_settings.phone }}</p>{% endif %}
+                            {% if site_settings.email %}<p><a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a></p>{% endif %}
+                        </address>
+
+                        <div class="footer_menu">
+                            <h2>Quick Links</h2>
+                            <ul>
+                                <li><a href="{% url 'content:announcements_list' %}">Announcements</a></li>
+                                <li><a href="{% url 'content:activities_list' %}">Activities</a></li>
+                                <li><a href="{% url 'blog:list' %}">Blog</a></li>
+                                <li><a href="{% url 'download:list' %}">Downloads</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-12">
+                    <div class="footer-info">
+                        <div class="section-title">
+                            <h2>About Us</h2>
+                        </div>
+                        <p>{{ site_settings.footer_text|default:"Government Office Content Management System" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/smoothscroll.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    
+    <script>
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            $('.alert').fadeOut('slow');
+        }, 5000);
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

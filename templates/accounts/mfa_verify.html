@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}MFA Verification - {{ site_settings.site_name|default:"SaiReeCMPO" }}{% endblock %}
+
+{% block content %}
+<section id="mfa-page" style="padding-top: 150px; min-height: 80vh;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="entry-form" style="margin-top: 0;">
+                    <h2 class="text-center">Two-Factor Authentication</h2>
+                    <p class="text-center text-muted">Enter the code from your authenticator app</p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        
+                        <div class="form-group">
+                            <button type="submit" class="submit-btn form-control">Verify</button>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center" style="margin-top: 20px;">
+                        <a href="{% url 'accounts:login' %}">Cancel and return to login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

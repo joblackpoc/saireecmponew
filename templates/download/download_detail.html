@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ file.title }} - {{ site_settings.site_name|default:"SaiReeCMPO" }}{% endblock %}
+
+{% block content %}
+<section id="download-detail" style="padding-top: 120px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="entry-form" style="margin-top: 0;">
+                    <div class="text-center" style="font-size: 72px; color: #f95959; margin-bottom: 20px;">
+                        <i class="fa {{ file.file_icon }}"></i>
+                    </div>
+                    
+                    <h2>{{ file.title }}</h2>
+                    
+                    <p class="text-muted">
+                        <span><i class="fa fa-file"></i> {{ file.file_extension|upper }}</span> &bull;
+                        <span><i class="fa fa-hdd-o"></i> {{ file.file_size }}</span> &bull;
+                        <span><i class="fa fa-download"></i> {{ file.download_count }} downloads</span>
+                    </p>
+                    
+                    <p>{{ file.short_description }}</p>
+                    
+                    {% if file.description %}
+                    <hr>
+                    <div>{{ file.description|linebreaks }}</div>
+                    {% endif %}
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        {% if file.is_pdf %}
+                        <a href="{% url 'download:view_pdf' file.pk %}" class="btn btn-default" target="_blank">
+                            <i class="fa fa-eye"></i> View PDF
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'download:download' file.pk %}" class="btn btn-primary">
+                            <i class="fa fa-download"></i> Download File
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                {% if related_files %}
+                <h4>Related Files</h4>
+                <ul class="list-unstyled">
+                    {% for related in related_files %}
+                    <li style="margin-bottom: 15px; padding: 10px; background: #f9f9f9;">
+                        <i class="fa {{ related.file_icon }}"></i>
+                        <a href="{% url 'download:detail' related.pk %}">{{ related.title }}</a>
+                        <br><small class="text-muted">{{ related.file_size }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

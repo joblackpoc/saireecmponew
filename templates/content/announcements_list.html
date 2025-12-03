@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Announcements - {{ site_settings.site_name|default:"SaiReeCMPO" }}{% endblock %}
+
+{% block content %}
+<section id="announcements-page" style="padding-top: 120px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-title">
+                    <h2>Announcements <small>News & Updates</small></h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row" style="margin-bottom: 30px;">
+            <div class="col-md-6">
+                <form method="get">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search announcements..." value="{{ request.GET.q }}">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for item in announcements %}
+            <div class="col-md-4 col-sm-6">
+                <div class="courses-thumb" style="margin-bottom: 30px;">
+                    <div class="courses-top">
+                        <div class="courses-image">
+                            {% if item.image %}
+                            <img src="{{ item.image.url }}" class="img-responsive" alt="{{ item.title }}">
+                            {% else %}
+                            <img src="{% static 'images/courses-image1.jpg' %}" class="img-responsive" alt="{{ item.title }}">
+                            {% endif %}
+                        </div>
+                        <div class="courses-date">
+                            <span><i class="fa fa-calendar"></i> {{ item.published_date|date:"d M Y" }}</span>
+                            {% if item.priority == 'urgent' %}
+                            <span class="pull-right label label-danger">Urgent</span>
+                            {% elif item.priority == 'high' %}
+                            <span class="pull-right label label-warning">Important</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="courses-detail">
+                        <h3><a href="{% url 'content:announcement_detail' item.pk %}">{{ item.title }}</a></h3>
+                        <p>{{ item.short_description|truncatewords:20 }}</p>
+                    </div>
+                    <div class="courses-info">
+                        <div class="courses-author">
+                            <span><i class="fa fa-eye"></i> {{ item.view_count }} views</span>
+                        </div>
+                        <div class="courses-price">
+                            <a href="{% url 'content:announcement_detail' item.pk %}"><span>Read More</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-12 text-center">
+                <p>No announcements found.</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if page_obj.has_other_pages %}
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                    {% endif %}
+                    {% for num in page_obj.paginator.page_range %}
+                    <li {% if page_obj.number == num %}class="active"{% endif %}><a href="?page={{ num }}">{{ num }}</a></li>
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

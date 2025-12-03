@@ -1,0 +1,339 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ site_settings.site_title|default:"SaiReeCMPO - Government Office CMS" }}{% endblock %}
+
+{% block content %}
+<!-- HOME / HERO -->
+<section id="home">
+    <div class="row">
+        <div class="owl-carousel owl-theme home-slider">
+            {% for slide in hero_slides %}
+            <div class="item" style="background-image: url('{{ slide.image.url }}');">
+                <div class="caption">
+                    <div class="container">
+                        <div class="col-md-6 col-sm-12">
+                            <h1>{{ slide.title }}</h1>
+                            <h3>{{ slide.subtitle }}</h3>
+                            {% if slide.button_text %}
+                            <a href="{{ slide.button_url }}" class="section-btn btn btn-default smoothScroll">{{ slide.button_text }}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="item item-first">
+                <div class="caption">
+                    <div class="container">
+                        <div class="col-md-6 col-sm-12">
+                            <h1>Welcome to {{ site_settings.site_name|default:"SaiReeCMPO" }}</h1>
+                            <h3>Government Office Content Management System</h3>
+                            <a href="#about" class="section-btn btn btn-default smoothScroll">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- FEATURE -->
+<section id="feature">
+    <div class="container">
+        <div class="row">
+            {% for feature in features %}
+            <div class="col-md-4 col-sm-4">
+                <div class="feature-thumb">
+                    <span>{{ feature.number|default:forloop.counter|stringformat:"02d" }}</span>
+                    <h3>{{ feature.title }}</h3>
+                    <p>{{ feature.description }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-4 col-sm-4">
+                <div class="feature-thumb">
+                    <span>01</span>
+                    <h3>Our Services</h3>
+                    <p>We provide excellent government services to all citizens.</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+                <div class="feature-thumb">
+                    <span>02</span>
+                    <h3>Transparency</h3>
+                    <p>We believe in open and transparent governance.</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+                <div class="feature-thumb">
+                    <span>03</span>
+                    <h3>Innovation</h3>
+                    <p>Using technology to serve you better.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <div class="about-info">
+                    {% for section in about_sections %}
+                    <h2>{{ section.title }}</h2>
+                    <div>{{ section.content|safe }}</div>
+                    {% empty %}
+                    <h2>About Us</h2>
+                    <p>Welcome to our government office website. We are committed to serving our community with excellence and integrity.</p>
+                    {% endfor %}
+                    
+                    {% if vision %}
+                    <figure>
+                        <span><i class="fa {{ vision.icon|default:'fa-eye' }}"></i></span>
+                        <figcaption>
+                            <h3>Vision</h3>
+                            <div>{{ vision.content|safe }}</div>
+                        </figcaption>
+                    </figure>
+                    {% endif %}
+                    
+                    {% if mission %}
+                    <figure>
+                        <span><i class="fa {{ mission.icon|default:'fa-bullseye' }}"></i></span>
+                        <figcaption>
+                            <h3>Mission</h3>
+                            <div>{{ mission.content|safe }}</div>
+                        </figcaption>
+                    </figure>
+                    {% endif %}
+                    
+                    {% for value in values %}
+                    <figure>
+                        <span><i class="fa {{ value.icon|default:'fa-star' }}"></i></span>
+                        <figcaption>
+                            <h3>{{ value.title }}</h3>
+                            <div>{{ value.content|safe }}</div>
+                        </figcaption>
+                    </figure>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-md-offset-1 col-md-4 col-sm-12">
+                <div class="entry-form">
+                    <form action="{% url 'accounts:register' %}" method="get">
+                        <h2>Join Us Today</h2>
+                        <p>Create an account to access more features.</p>
+                        <button class="submit-btn form-control" type="submit">Get Started</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="section-title">
+                    <h2>Our Team <small>Meet Our Professional Staff</small></h2>
+                </div>
+            </div>
+
+            {% for member in team_members %}
+            <div class="col-md-3 col-sm-6">
+                <div class="team-thumb">
+                    <div class="team-image">
+                        <img src="{{ member.image.url }}" class="img-responsive" alt="{{ member.name }}">
+                    </div>
+                    <div class="team-info">
+                        <h3>{{ member.name }}</h3>
+                        <span>{{ member.position }}</span>
+                    </div>
+                    <ul class="social-icon">
+                        {% if member.facebook %}<li><a href="{{ member.facebook }}" class="fa fa-facebook-square" target="_blank"></a></li>{% endif %}
+                        {% if member.twitter %}<li><a href="{{ member.twitter }}" class="fa fa-twitter" target="_blank"></a></li>{% endif %}
+                        {% if member.linkedin %}<li><a href="{{ member.linkedin }}" class="fa fa-linkedin" target="_blank"></a></li>{% endif %}
+                        {% if member.instagram %}<li><a href="{{ member.instagram }}" class="fa fa-instagram" target="_blank"></a></li>{% endif %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ANNOUNCEMENTS -->
+<section id="announcements">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="section-title">
+                    <h2>Announcements <small>Latest News & Updates</small></h2>
+                </div>
+
+                <div class="owl-carousel owl-theme owl-courses">
+                    {% for announcement in announcements %}
+                    <div class="col-md-4 col-sm-4">
+                        <div class="item">
+                            <div class="courses-thumb">
+                                <div class="courses-top">
+                                    <div class="courses-image">
+                                        {% if announcement.image %}
+                                        <img src="{{ announcement.image.url }}" class="img-responsive" alt="{{ announcement.title }}">
+                                        {% else %}
+                                        <img src="{% static 'images/courses-image1.jpg' %}" class="img-responsive" alt="{{ announcement.title }}">
+                                        {% endif %}
+                                    </div>
+                                    <div class="courses-date">
+                                        <span><i class="fa fa-calendar"></i> {{ announcement.published_date|date:"d/m/Y" }}</span>
+                                        <span class="pull-right">
+                                            {% if announcement.priority == 'urgent' %}
+                                            <span class="label label-danger">Urgent</span>
+                                            {% elif announcement.priority == 'high' %}
+                                            <span class="label label-warning">Important</span>
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="courses-detail">
+                                    <h3><a href="{% url 'content:announcement_detail' announcement.pk %}">{{ announcement.title }}</a></h3>
+                                    <p>{{ announcement.short_description|truncatewords:20 }}</p>
+                                </div>
+
+                                <div class="courses-info">
+                                    <div class="courses-author">
+                                        <span><i class="fa fa-eye"></i> {{ announcement.view_count }} views</span>
+                                    </div>
+                                    <div class="courses-price">
+                                        <a href="{% url 'content:announcement_detail' announcement.pk %}"><span>Read More</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="text-center" style="margin-top: 30px;">
+                    <a href="{% url 'content:announcements_list' %}" class="btn btn-primary">View All Announcements</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ACTIVITIES -->
+<section id="activities" class="testimonial">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="section-title">
+                    <h2>Activities <small>Recent Events & Programs</small></h2>
+                </div>
+
+                <div class="owl-carousel owl-theme owl-client">
+                    {% for activity in activities %}
+                    <div class="col-md-4 col-sm-4">
+                        <div class="item">
+                            <div class="tst-image">
+                                <img src="{{ activity.image.url }}" class="img-responsive" alt="{{ activity.title }}">
+                            </div>
+                            <div class="tst-author">
+                                <h4><a href="{% url 'content:activity_detail' activity.pk %}">{{ activity.title }}</a></h4>
+                                <span><i class="fa fa-calendar"></i> {{ activity.event_date|date:"d M Y" }}</span>
+                                {% if activity.location %}
+                                <span><i class="fa fa-map-marker"></i> {{ activity.location }}</span>
+                                {% endif %}
+                            </div>
+                            <p>{{ activity.short_description|truncatewords:25 }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="text-center" style="margin-top: 30px;">
+                    <a href="{% url 'content:activities_list' %}" class="btn btn-primary">View All Activities</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- LOCATION -->
+{% if location %}
+<section id="location">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="section-title">
+                    <h2>Our Location <small>Visit Us</small></h2>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-sm-12">
+                <h3>{{ location.name }}</h3>
+                <p><i class="fa fa-map-marker"></i> {{ location.address|linebreaks }}</p>
+                {% if location.phone %}<p><i class="fa fa-phone"></i> {{ location.phone }}</p>{% endif %}
+                {% if location.fax %}<p><i class="fa fa-fax"></i> {{ location.fax }}</p>{% endif %}
+                {% if location.email %}<p><i class="fa fa-envelope"></i> {{ location.email }}</p>{% endif %}
+                {% if location.working_hours %}
+                <h4>Working Hours</h4>
+                <p>{{ location.working_hours|linebreaks }}</p>
+                {% endif %}
+            </div>
+            
+            <div class="col-md-6 col-sm-12">
+                {% if location.google_maps_embed %}
+                <div class="map-container">
+                    {{ location.google_maps_embed|safe }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- CONTACT -->
+<section id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <form id="contact-form" action="{% url 'content:contact_submit' %}" method="post">
+                    {% csrf_token %}
+                    <div class="section-title">
+                        <h2>Contact us <small>We'd love to hear from you!</small></h2>
+                    </div>
+
+                    <div class="col-md-12 col-sm-12">
+                        <input type="text" class="form-control" placeholder="Enter full name" name="name" required>
+                        <input type="email" class="form-control" placeholder="Enter email address" name="email" required>
+                        <input type="text" class="form-control" placeholder="Phone (optional)" name="phone">
+                        <input type="text" class="form-control" placeholder="Subject" name="subject" required>
+                        <textarea class="form-control" rows="6" placeholder="Your message" name="message" required></textarea>
+                    </div>
+
+                    <div class="col-md-4 col-sm-12">
+                        <input type="submit" class="form-control" value="Send Message">
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-md-6 col-sm-12">
+                <div class="contact-image">
+                    <img src="{% static 'images/contact-image.jpg' %}" class="img-responsive" alt="Contact Us">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

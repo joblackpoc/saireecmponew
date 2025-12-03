@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login - {{ site_settings.site_name|default:"SaiReeCMPO" }}{% endblock %}
+
+{% block content %}
+<section id="login-page" style="padding-top: 150px; min-height: 80vh;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="entry-form" style="margin-top: 0;">
+                    <h2 class="text-center">Login</h2>
+                    <p class="text-center text-muted">Sign in to your account</p>
+                    
+                    <form method="post" action="{% url 'accounts:login' %}">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        
+                        <div class="form-group">
+                            <button type="submit" class="submit-btn form-control">Login</button>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center" style="margin-top: 20px;">
+                        <a href="{% url 'accounts:password_reset' %}">Forgot Password?</a>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        Don't have an account? <a href="{% url 'accounts:register' %}">Register here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'dashboard/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">{{ title }}</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info">
+            <i class="fa fa-info-circle"></i> Upload a Word (DOCX) or PowerPoint (PPTX) file to convert to PDF and HTML.
+        </div>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+        </form>
+    </div>
+</div>
+{% endblock %}

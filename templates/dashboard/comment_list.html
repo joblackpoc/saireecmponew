@@ -1,0 +1,26 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Comments{% endblock %}
+{% block page_title %}Manage Blog Comments{% endblock %}
+{% block dashboard_content %}
+<div class="card">
+    <div class="card-header"><h5 class="mb-0">Blog Comments</h5></div>
+    <div class="card-body">
+        <table class="table">
+            <thead><tr><th>Post</th><th>Name</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.post.title|truncatewords:5 }}</td><td>{{ item.name }}</td>
+                    <td>{{ item.created_at|date:"d M Y" }}</td>
+                    <td>{% if item.is_approved %}<span class="badge bg-success">Approved</span>{% else %}<span class="badge bg-warning">Pending</span>{% endif %}</td>
+                    <td>
+                        {% if not item.is_approved %}<a href="{% url 'blog:dashboard_comment_approve' item.pk %}" class="btn btn-sm btn-outline-success"><i class="fa fa-check"></i></a>{% endif %}
+                        <a href="{% url 'blog:dashboard_comment_delete' item.pk %}" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+                {% empty %}<tr><td colspan="5" class="text-center text-muted">No comments</td></tr>{% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

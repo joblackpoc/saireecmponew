@@ -1,0 +1,30 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Locations{% endblock %}
+{% block page_title %}Manage Locations{% endblock %}
+{% block dashboard_content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Locations</h5>
+        <a href="{% url 'content:dashboard_location_add' %}" class="btn btn-primary"><i class="fa fa-plus"></i> Add Location</a>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead><tr><th>Name</th><th>Main</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{% if item.is_main %}<i class="fa fa-check text-success"></i>{% else %}-{% endif %}</td>
+                    <td>{{ item.order }}</td>
+                    <td>{% if item.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
+                    <td>
+                        <a href="{% url 'content:dashboard_location_edit' item.pk %}" class="btn btn-sm btn-outline-primary"><i class="fa fa-edit"></i></a>
+                        <a href="{% url 'content:dashboard_location_delete' item.pk %}" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+                {% empty %}<tr><td colspan="5" class="text-center text-muted">No locations</td></tr>{% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

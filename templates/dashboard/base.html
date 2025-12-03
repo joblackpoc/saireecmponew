@@ -1,0 +1,292 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %} - {{ site_settings.site_name|default:"SaiReeCMPO" }}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 48px 0 0;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+            background-color: #343a40;
+            width: 250px;
+        }
+        .sidebar-sticky {
+            position: relative;
+            top: 0;
+            height: calc(100vh - 48px);
+            padding-top: .5rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        .sidebar .nav-link {
+            font-weight: 500;
+            color: #adb5bd;
+            padding: 12px 20px;
+        }
+        .sidebar .nav-link:hover {
+            color: #fff;
+            background-color: rgba(255,255,255,0.1);
+        }
+        .sidebar .nav-link.active {
+            color: #fff;
+            background-color: #007bff;
+        }
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+        }
+        .sidebar-heading {
+            font-size: .75rem;
+            text-transform: uppercase;
+            color: #6c757d;
+            padding: 10px 20px;
+        }
+        .navbar-brand {
+            padding: 10px 20px;
+            background-color: rgba(0,0,0,0.25);
+            font-weight: bold;
+        }
+        main {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .top-navbar {
+            margin-left: 250px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card {
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        .stat-card {
+            border-left: 4px solid;
+        }
+        .stat-card.primary { border-left-color: #007bff; }
+        .stat-card.success { border-left-color: #28a745; }
+        .stat-card.warning { border-left-color: #ffc107; }
+        .stat-card.danger { border-left-color: #dc3545; }
+        .stat-card .stat-icon {
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            color: #6c757d;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                padding: 0;
+            }
+            main, .top-navbar {
+                margin-left: 0;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-sticky">
+            <a class="navbar-brand text-white d-block" href="{% url 'accounts:dashboard' %}">
+                {{ site_settings.site_name|default:"SaiReeCMPO" }}
+            </a>
+            
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'dashboard' %}active{% endif %}" href="{% url 'accounts:dashboard' %}">
+                        <i class="fa fa-dashboard"></i> Dashboard
+                    </a>
+                </li>
+            </ul>
+            
+            <h6 class="sidebar-heading">Content Management</h6>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'settings' %}active{% endif %}" href="{% url 'content:dashboard_site_settings' %}">
+                        <i class="fa fa-cog"></i> Site Settings
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'navbar' %}active{% endif %}" href="{% url 'content:dashboard_navbar_list' %}">
+                        <i class="fa fa-bars"></i> Navbar Menu
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'hero' %}active{% endif %}" href="{% url 'content:dashboard_hero_list' %}">
+                        <i class="fa fa-image"></i> Hero Slides
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'about' %}active{% endif %}" href="{% url 'content:dashboard_about_list' %}">
+                        <i class="fa fa-info-circle"></i> About Sections
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'vmv' %}active{% endif %}" href="{% url 'content:dashboard_vmv_list' %}">
+                        <i class="fa fa-eye"></i> Vision/Mission/Values
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'team' %}active{% endif %}" href="{% url 'content:dashboard_team_list' %}">
+                        <i class="fa fa-users"></i> Team Members
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'features' %}active{% endif %}" href="{% url 'content:dashboard_feature_list' %}">
+                        <i class="fa fa-star"></i> Features
+                    </a>
+                </li>
+            </ul>
+            
+            <h6 class="sidebar-heading">News & Activities</h6>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'announcements' %}active{% endif %}" href="{% url 'content:dashboard_announcement_list' %}">
+                        <i class="fa fa-bullhorn"></i> Announcements
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'activities' %}active{% endif %}" href="{% url 'content:dashboard_activity_list' %}">
+                        <i class="fa fa-calendar"></i> Activities
+                    </a>
+                </li>
+            </ul>
+            
+            <h6 class="sidebar-heading">Blog</h6>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'blog' %}active{% endif %}" href="{% url 'blog:dashboard_list' %}">
+                        <i class="fa fa-newspaper-o"></i> Blog Posts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'blog_categories' %}active{% endif %}" href="{% url 'blog:dashboard_category_list' %}">
+                        <i class="fa fa-folder"></i> Categories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'blog_tags' %}active{% endif %}" href="{% url 'blog:dashboard_tag_list' %}">
+                        <i class="fa fa-tags"></i> Tags
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'blog_comments' %}active{% endif %}" href="{% url 'blog:dashboard_comment_list' %}">
+                        <i class="fa fa-comments"></i> Comments
+                    </a>
+                </li>
+            </ul>
+            
+            <h6 class="sidebar-heading">Downloads</h6>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'downloads' %}active{% endif %}" href="{% url 'download:dashboard_list' %}">
+                        <i class="fa fa-download"></i> Files
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'download_categories' %}active{% endif %}" href="{% url 'download:dashboard_category_list' %}">
+                        <i class="fa fa-folder-open"></i> Categories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'download_logs' %}active{% endif %}" href="{% url 'download:dashboard_log_list' %}">
+                        <i class="fa fa-history"></i> Download Logs
+                    </a>
+                </li>
+            </ul>
+            
+            <h6 class="sidebar-heading">Tools</h6>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'pdf' %}active{% endif %}" href="{% url 'pdfapp:list' %}">
+                        <i class="fa fa-file-pdf-o"></i> PDF Converter
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'locations' %}active{% endif %}" href="{% url 'content:dashboard_location_list' %}">
+                        <i class="fa fa-map-marker"></i> Locations
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if module == 'contacts' %}active{% endif %}" href="{% url 'content:dashboard_contact_list' %}">
+                        <i class="fa fa-envelope"></i> Contact Messages
+                    </a>
+                </li>
+            </ul>
+            
+            <hr style="border-color: #495057;">
+            
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'content:landing' %}">
+                        <i class="fa fa-globe"></i> View Website
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:profile' %}">
+                        <i class="fa fa-user"></i> Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:logout' %}">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg top-navbar">
+        <div class="container-fluid">
+            <span class="navbar-text">
+                {% block page_title %}Dashboard{% endblock %}
+            </span>
+            <span class="navbar-text ms-auto">
+                <i class="fa fa-user"></i> {{ user.get_full_name|default:user.email }}
+            </span>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        
+        {% block dashboard_content %}{% endblock %}
+    </main>
+    
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

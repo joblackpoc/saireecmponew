@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Blog - {{ site_settings.site_name|default:"SaiReeCMPO" }}{% endblock %}
+
+{% block content %}
+<section id="blog-page" style="padding-top: 120px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-title">
+                    <h2>Blog <small>Latest Articles & News</small></h2>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Search & Filter -->
+        <div class="row" style="margin-bottom: 30px;">
+            <div class="col-md-6">
+                <form method="get" class="form-inline">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search posts..." value="{{ request.GET.q }}">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6 text-right">
+                <div class="btn-group">
+                    <a href="{% url 'blog:list' %}" class="btn btn-default {% if not request.GET.category %}active{% endif %}">All</a>
+                    {% for cat in categories %}
+                    <a href="?category={{ cat.slug }}" class="btn btn-default {% if request.GET.category == cat.slug %}active{% endif %}">{{ cat.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Blog Posts -->
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-md-4 col-sm-6">
+                <div class="courses-thumb" style="margin-bottom: 30px;">
+                    <div class="courses-top">
+                        <div class="courses-image">
+                            {% if post.image %}
+                            <img src="{{ post.image.url }}" class="img-responsive" alt="{{ post.title }}">
+                            {% else %}
+                            <img src="{% static 'images/courses-image1.jpg' %}" class="img-responsive" alt="{{ post.title }}">
+                            {% endif %}
+                        </div>
+                        <div class="courses-date">
+                            <span><i class="fa fa-calendar"></i> {{ post.published_at|date:"d M Y" }}</span>
+                            {% if post.category %}
+                            <span class="pull-right"><i class="fa fa-folder"></i> {{ post.category.name }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="courses-detail">
+                        <h3><a href="{% url 'blog:detail' post.slug %}">{{ post.title }}</a></h3>
+                        <p>{{ post.short_description|truncatewords:25 }}</p>
+                    </div>
+                    <div class="courses-info">
+                        <div class="courses-author">
+                            <span><i class="fa fa-user"></i> {{ post.author.get_full_name|default:post.author.email }}</span>
+                        </div>
+                        <div class="courses-price">
+                            <a href="{% url 'blog:detail' post.slug %}"><span>Read More</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-12 text-center">
+                <p>No blog posts found.</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                    {% endif %}
+                    {% for num in page_obj.paginator.page_range %}
+                    <li {% if page_obj.number == num %}class="active"{% endif %}><a href="?page={{ num }}">{{ num }}</a></li>
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

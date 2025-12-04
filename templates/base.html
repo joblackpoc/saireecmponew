@@ -46,6 +46,45 @@
             color: #757575;
             margin-top: 5px;
         }
+
+        /* Location section styles */
+        #location .text-center {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #location .text-center p {
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Map container styles */
+        .map-container {
+            width: 100%;
+            max-width: 100%;
+            height: 450px;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .map-container iframe {
+            width: 100% !important;
+            height: 100% !important;
+            border: 0;
+            display: block;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .map-container {
+                height: 300px;
+            }
+        }
     </style>
 </head>
 <body id="top" data-spy="scroll" data-target=".navbar-collapse" data-offset="50">

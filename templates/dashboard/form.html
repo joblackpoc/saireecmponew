@@ -14,10 +14,7 @@
         <h5 class="mb-0">{{ title }}</h5>
     </div>
     <div class="card-body">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form|crispy }}
-        </form>
+        {% crispy form %}
     </div>
 </div>
 {% endblock %}

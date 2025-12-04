@@ -273,33 +273,32 @@
 <section id="location">
     <div class="container">
         <div class="row">
-            <div class="col-md-12 col-sm-12">
-                <div class="section-title">
-                    <h2>Our Location <small>Visit Us</small></h2>
-                </div>
-            </div>
-            
-            <div class="col-md-6 col-sm-12">
-                <h3>{{ location.name }}</h3>
-                <p><i class="fa fa-map-marker"></i> {{ location.address|linebreaks }}</p>
+            <div class="col-md-12 col-sm-12" style="margin-bottom: 5px;">
+                <h3 style="margin-bottom: 5px;">{{ location.name }}</h3>
+                <p style="display: flex; align-items: flex-start; gap: 8px;">
+                    <i class="fa fa-map-marker" style="margin-top: 3px;"></i>
+                    <span>{{ location.address }}</span>
+                </p>
                 {% if location.phone %}<p><i class="fa fa-phone"></i> {{ location.phone }}</p>{% endif %}
                 {% if location.fax %}<p><i class="fa fa-fax"></i> {{ location.fax }}</p>{% endif %}
                 {% if location.email %}<p><i class="fa fa-envelope"></i> {{ location.email }}</p>{% endif %}
                 {% if location.working_hours %}
-                <h4>Working Hours</h4>
+                <h4>เวลาทำการ</h4>
                 <p>{{ location.working_hours|linebreaks }}</p>
-                {% endif %}
-            </div>
-            
-            <div class="col-md-6 col-sm-12">
-                {% if location.google_maps_embed %}
-                <div class="map-container">
-                    {{ location.google_maps_embed|safe }}
-                </div>
                 {% endif %}
             </div>
         </div>
     </div>
+
+    {% if location.google_maps_embed %}
+    <div class="container">
+        <div style="display: flex; justify-content: center; width: 100%; margin-top: 20px;">
+            <div class="map-container">
+                {{ location.google_maps_embed|safe }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </section>
 {% endif %}
 
